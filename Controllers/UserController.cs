@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Linq;
 using UserDomain = buy_house.Database.Models.User;
 
 namespace buy_house.Controllers
@@ -12,20 +11,20 @@ namespace buy_house.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
-        private readonly BuyHouseDbContext _buyHouseDbContext;
+        private readonly IDatabaseService _databaseService;
 
         public UsersController(
             ILogger<UsersController> logger,
-            BuyHouseDbContext buyHouseDbContext)
+            IDatabaseService databaseService)
         {
             _logger = logger;
-            _buyHouseDbContext = buyHouseDbContext;
+            _databaseService = databaseService;
         }
 
         [HttpGet]
         public IEnumerable<UserDomain> Get()
         {
-            List<UserDomain> users = _buyHouseDbContext.Users.ToList();
+            List<UserDomain> users = _databaseService.GetAllUsers();
             return users;
         }
     }

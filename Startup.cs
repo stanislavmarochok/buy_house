@@ -31,6 +31,8 @@ namespace buy_house
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddScoped<IDatabaseService, DatabaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +61,7 @@ namespace buy_house
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp/pages";
 
                 if (env.IsDevelopment())
                 {
