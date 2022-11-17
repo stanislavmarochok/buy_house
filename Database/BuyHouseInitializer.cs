@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 
 using UserDomain = buy_house.Database.Models.User;
+using ItemDomain = buy_house.Database.Models.Item;
+using System;
 
 namespace buy_house.Database
 {
@@ -9,8 +11,12 @@ namespace buy_house.Database
         public static void Initialize(BuyHouseDbContext context)
         {
             var isCreated = context.Database.EnsureCreated();
+            CreateUsers(context);
+            CreateItems(context);
+        }
 
-            // Look for any users.
+        public static void CreateUsers(BuyHouseDbContext context)
+        {
             if (context.Users.Any())
             {
                 return; // DB has been seeded
@@ -31,5 +37,31 @@ namespace buy_house.Database
             }
             context.SaveChanges();
         }
+
+        public static void CreateItems(BuyHouseDbContext context)
+        {
+            if (context.Items.Any())
+            {
+                return; // DB has been seeded
+            }
+
+            var items = new ItemDomain[]
+            {
+                new ItemDomain
+                {
+                   Title = "Beautiful house",
+                   Price = 2500,
+                   Adress = "huynya",
+                   Date = DateTime.Now,
+                   Description = "description descriptiondescription"
+                }
+            };
+            foreach (ItemDomain item in items)
+            {
+                context.Items.Add(item);
+            }
+            context.SaveChanges();
+        }
+
     }
 }

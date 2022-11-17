@@ -17,5 +17,15 @@ namespace buy_house.Database
         {
             return _buyHouseDbContext.Users.ToList();
         }
+
+        public List<Item> GetAllItems()
+        {
+            return _buyHouseDbContext.Items.ToList();
+        }
+
+        public Item GetItemById(int id)
+        {
+            return _buyHouseDbContext.Items.FirstOrDefault(item => item.Id == id);
+        }
     }
 }

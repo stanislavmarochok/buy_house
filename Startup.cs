@@ -61,7 +61,7 @@ namespace buy_house
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp/pages";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
