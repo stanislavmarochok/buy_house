@@ -1,4 +1,6 @@
-﻿using buy_house.Database;
+﻿using buy_house.Controllers.Contracts.Requests;
+using buy_house.Controllers.Contracts.Responses;
+using buy_house.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -26,6 +28,13 @@ namespace buy_house.Controllers
         {
             List<UserDomain> users = _databaseService.GetAllUsers();
             return users;
+        }
+
+        [HttpPost]
+        public RegisterUserResponseContract RegisterUser([FromBody] RegisterUserRequestContract request)
+        {
+            RegisterUserResponseContract response = _databaseService.RegisterUser(request);
+            return response;
         }
     }
 }

@@ -3,26 +3,30 @@
 using UserDomain = buy_house.Database.Models.User;
 using ItemDomain = buy_house.Database.Models.Item;
 using System;
+using System.Collections.Generic;
 
 namespace buy_house.Database
 {
     public class BuyHouseInitializer
     {
+        static List<UserDomain> _newUsers;
+        static List<ItemDomain> _newItems;
+
         public static void Initialize(BuyHouseDbContext context)
         {
             var isCreated = context.Database.EnsureCreated();
-            CreateUsers(context);
-            CreateItems(context);
+            _newUsers = CreateUsers(context);
+            _newItems = CreateItems(context);
         }
 
-        public static void CreateUsers(BuyHouseDbContext context)
+        public static List<UserDomain> CreateUsers(BuyHouseDbContext context)
         {
             if (context.Users.Any())
             {
-                return; // DB has been seeded
+                return Enumerable.Empty<UserDomain>().ToList(); // DB has been seeded
             }
 
-            var users = new UserDomain[]
+            List<UserDomain> users = new List<UserDomain>
             {
                 new UserDomain
                 {
@@ -36,31 +40,33 @@ namespace buy_house.Database
                 context.Users.Add(user);
             }
             context.SaveChanges();
+            return users;
         }
 
-        public static void CreateItems(BuyHouseDbContext context)
+        public static List<ItemDomain> CreateItems(BuyHouseDbContext context)
         {
             if (context.Items.Any())
             {
-                return; // DB has been seeded
+                return Enumerable.Empty<ItemDomain>().ToList(); // DB has been seeded
             }
 
-            var items = new ItemDomain[]
+            List<ItemDomain> items = new List<ItemDomain>();
+            foreach (UserDomain user in _newUsers)
             {
-                new ItemDomain
+                ItemDomain newItem = new ItemDomain
                 {
-                   Title = "Beautiful house",
-                   Price = 2500,
-                   Adress = "huynya",
-                   Date = DateTime.Now,
-                   Description = "description descriptiondescription"
-                }
-            };
-            foreach (ItemDomain item in items)
-            {
-                context.Items.Add(item);
+                    UserId = user.Id,
+                    Title = "Beautiful house",
+                    Price = 2500,
+                    Adress = "huynya",
+                    Date = DateTime.Now,
+                    Description = "description descriptiondescription"
+                };
+                context.Items.Add(newItem);
             }
+
             context.SaveChanges();
+            return items;
         }
 
     }
