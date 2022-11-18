@@ -12,3 +12,12 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+body{
+  background-image: radial-gradient(#444CF7 1px, transparent 1px), radial-gradient(#444CF7 1px, #E5E5F7 1px);
+  background-size: 36px 36px;
+  background-position: 0px 0px 18px 18px;
+  background-attachment: fixed;
+}
+
+

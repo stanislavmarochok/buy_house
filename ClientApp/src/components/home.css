@@ -1,0 +1,170 @@
+.card{
+    transition: 0.3s;
+}
+
+.card-group{
+    margin-top: 1rem;
+}
+
+.card:hover{
+    filter: brightness(80%);
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+.filter-body {
+    border: 1px solid rgb(204, 204, 204);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.filters-collapse-button{
+    border-radius: 10px 10px 0px 0px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.filterLine{
+    display: inline-flex;
+    align-items: center;
+    margin-right: 1rem;
+    font-weight: 600;
+    padding-right: 1rem;
+    border-right: 1px solid rgb(165, 165, 165);
+}
+
+.filterLine:last-child{
+    border: none;
+}
+
+.filterLine [type="number"]{
+    width: 70px;
+    margin-left: 0.5rem;
+    text-align: center;
+}
+
+.filterLine select{
+    margin-left: 0.5rem;
+
+}
+
+.filter-body .card-body{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn{
+    transition: 0.3s;
+}
+.filter-body .button span{
+    font-size: 0px;
+    transition: 0.3s;
+}
+
+.filter-body .button:hover span{
+    font-size: 16px;
+}
+
+.filter-body .button:hover{
+    background-color: #1b6ec2;
+    border: #1861ac;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+.filterLines{
+    display: flex;
+}
+
+
+@media (max-width: 1000px) {
+
+    .filter-body .card-body{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filterLines{
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .filterLine{
+        margin: 0;
+        padding: 0;
+        margin-bottom: 1rem;
+        border: none;
+    }
+
+}
+
+
+.filtersFile .card-body{
+    background-color: #fff;
+    border: 1px solid rgb(204, 204, 204);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.form-addAd {
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px rgb(156, 156, 156);
+}
+
+.form-signIn{
+    margin: 1rem auto;
+    width: 40%;
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px rgb(156, 156, 156);
+}
+
+.form-signIn button:hover{
+    background-color: rgb(67, 58, 152);
+    letter-spacing: 4px;
+}
+
+
+@media (max-width: 1000px) {
+
+    .form-signIn{
+        margin: 1rem auto;
+        width: 80%;
+        background-color: #fff;
+        padding: 1rem;
+        box-shadow: 0px 0px 10px rgb(156, 156, 156);
+    }
+
+}
+
+@media (max-width: 570px) {
+
+    .form-signIn{
+        width: 100%;
+    }
+
+    .form-signIn button{
+        width: 100%;
+    }
+
+    .form-signUp button{
+        width: 100%;
+    }
+
+}
+
+.form label{
+    font-weight: 700;
+}
+
+.form-signUp{
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px rgb(156, 156, 156);
+}
+
+.form-signUp button:hover{
+    background-color: rgb(67, 58, 152);
+    letter-spacing: 4px;
+}

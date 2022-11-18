@@ -1,0 +1,36 @@
+.itemMyAd{
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+    margin-bottom: 1rem;    
+    box-shadow: 0px 0px 10px rgb(156, 156, 156);
+    transition: 0.3s;
+}
+
+.itemMyAd tr th:nth-child(1){
+    width: 10px;
+    padding: 1rem;
+}
+
+.itemMyAd tr th:nth-child(2){
+    width: 20%;
+}
+
+.itemMyAd tr th:nth-child(4){
+    width: 20%;
+    font-weight: normal;
+    font-size: 14px;
+    color: rgb(151, 151, 151);
+}
+
+.itemMyAd tr th:nth-child(5){
+    text-align: center;
+    width: 5%;
+    padding: 0.5rem;
+}
+
+.itemMyAd tr th:last-child{
+    text-align: center;
+    padding: 0.5rem;
+    width: 5%;
+}
