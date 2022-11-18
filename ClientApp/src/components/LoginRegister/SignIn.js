@@ -40,8 +40,9 @@ export class SignIn extends Component {
     console.log(data);
     this.setState({ response : data });
 
-    sessionStorage.setItem("authenticatedUserName", data.responseBody.email);
+    sessionStorage.setItem("authenticatedUserEmail", data.responseBody.email);
     sessionStorage.setItem("authenticatedUserId", data.responseBody.id);
+    sessionStorage.setItem("authenticatedUserName", data.responseBody.name);
   }
 
   render() {

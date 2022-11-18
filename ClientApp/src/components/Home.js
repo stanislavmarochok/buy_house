@@ -3,19 +3,23 @@ import Filters  from './Filters';
 import './home.css';
 import { CardGroup, Card, CardImg, CardBody, CardLink, CardTitle, CardSubtitle, CardText, Button, Navbar, NavbarBrand} from 'reactstrap';
 
-
-
-
 export class Home extends Component {
   static displayName = Home.name;
 
   constructor(props){
     super(props);
-    this.state = {groups: this.getGroups()};
+    this.state = { 
+      groups: [],
+      items: []
+    };
+  }
+
+  componentDidMount(){
+    this.fetchItems();
   }
   
-  getGroups() {
-    let items = [{name: 1},{name: 2},{name: 3},{name: 4},{name: 5}];
+  getGroups(data) {
+    let items = data;
     let groupsCount = parseInt(Math.floor(items.length / 3));
 
     const _groups = [];
@@ -34,82 +38,64 @@ export class Home extends Component {
     return _groups;
   }
 
- 
-  
-
 
   render () {
     if(!this.state || !this.state.groups){
       return;
     }
     return (
-
       <main>
-        <Filters/>
-        
-        
-        
+        <Filters applyFilters={this.fetchItems} />
         
         <div> {/*here cards */}
-              {this.state.groups.map((group, groupIndex) => (
-                  <CardGroup key={`cardGroup-${groupIndex}`}>
-                    {group.map((card, cardIndex) => 
-                      <Card key={`cardgroup-${groupIndex}-card-${cardIndex}`}>
-                        <CardImg alt="Card image cap" src="https://picsum.photos/318/180" top width="100%" />
-                        <CardBody>
-                          <CardTitle tag="h5"> Beautiful house </CardTitle>
-                          <CardSubtitle className="mb-3" tag="h6"> Dnipro </CardSubtitle>
-                          <CardSubtitle className="mb-2 text-muted" tag="h6"> 1200$ </CardSubtitle>
-                          <CardText>
-                            This is super mega hyper interesting immosible interesting description
-                          </CardText>
-                          <Button> Button </Button>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </CardGroup>
-              ))}
-
-
-          {/* <CardGroup>
-            <Card style={{minWidth: "30% important"}}>
-              <CardImg alt="Card image cap" src="https://picsum.photos/318/180" top width="100%" />
-              <CardBody>
-                <CardTitle tag="h5"> Card title </CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6"> Card subtitle </CardSubtitle>
-                <CardText>
-                  This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
-                </CardText>
-                <Button> Button </Button>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardImg alt="Card image cap" src="https://picsum.photos/318/180" top width="100%" />
-              <CardBody>
-                <CardTitle tag="h5"> Card title </CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6"> Card subtitle </CardSubtitle>
-                <CardText>
-                  This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
-                </CardText>
-                <Button> Button </Button>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardImg alt="Card image cap" src="https://picsum.photos/318/180" top width="100%" />
-              <CardBody>
-                <CardTitle tag="h5"> Card title </CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6"> Card subtitle </CardSubtitle>
-                <CardText>
-                  This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
-                </CardText>
-                <Button> Button </Button>
-              </CardBody>
-            </Card>
-          </CardGroup> */}
+          {this.state.groups.map((group, groupIndex) => (
+              <CardGroup key={`cardGroup-${groupIndex}`}>
+                {group.map((card, cardIndex) => 
+                  <Card key={`cardgroup-${groupIndex}-card-${cardIndex}`}>
+                    <CardImg alt="Card image cap" src={card.imageLocation} top width="100%" />
+                    <CardBody>
+                      <CardTitle tag="h5"> Beautiful house </CardTitle>
+                      <CardSubtitle className="mb-3" tag="h6"> Dnipro </CardSubtitle>
+                      <CardSubtitle className="mb-2 text-muted" tag="h6"> 1200$ </CardSubtitle>
+                      <CardText>
+                        This is super mega hyper interesting immosible interesting description
+                      </CardText>
+                      <Button> Button </Button>
+                    </CardBody>
+                  </Card>
+                )}
+              </CardGroup>
+          ))}
         </div>
       </main>
     );
   }
 
-  
+  fetchItems = async () => {
+    const priceMin = document.getElementById("filter-priceMin").value;
+    const priceMax = document.getElementById("filter-priceMax").value;
+    const location = document.getElementById("filter-location").value;
+    const title    = document.getElementById("filter-title").value;
+
+    const _filters = {
+        priceMin: priceMin,
+        priceMax: priceMax,
+        location: location,
+        title: title
+    }
+
+    const method = "get";
+    const headers = {'Content-Type':'application/json'};
+    const _body = {
+        filters : _filters,
+    };
+
+    const response = await fetch('api/items?' + new URLSearchParams(_body), {
+        method : method,
+        headers: headers
+    });
+    const data = await response.json();
+    console.log(data);
+    this.setState({ items : data, groups : this.getGroups(data) });
+  }
 }

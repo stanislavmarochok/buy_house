@@ -1,20 +1,28 @@
 ﻿using buy_house.Controllers.Contracts.Requests;
 using buy_house.Controllers.Contracts.Responses;
 using buy_house.Database.Models;
+using Microsoft.AspNetCore.Hosting;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using UserDomain = buy_house.Database.Models.User;
+using ItemDomain = buy_house.Database.Models.Item;
 
 namespace buy_house.Database
 {
     public class DatabaseService : IDatabaseService
     {
         private readonly BuyHouseDbContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public DatabaseService(BuyHouseDbContext buyHouseDbContext)
+        public DatabaseService(
+            BuyHouseDbContext buyHouseDbContext,
+            IHostingEnvironment hostingEnvironment)
         {
             _context = buyHouseDbContext;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public List<UserDomain> GetAllUsers()
@@ -80,6 +88,53 @@ namespace buy_house.Database
             }
 
             return response;
+        }
+
+        public AddItemResponseContract AddItem(AddItemRequestContract request)
+        {
+            try
+            {
+
+                string imageLocation = $"public/images/items/{Guid.NewGuid()}.jpg";
+                string path = Path.Combine(_hostingEnvironment.WebRootPath, imageLocation);
+                using (Stream stream = new FileStream(path, FileMode.Create))
+                {
+                    request.Image.CopyTo(stream);
+                }
+
+                ItemDomain newItem = new ItemDomain
+                {
+                    UserId = request.UserId,
+                    Title = request.Title,
+                    Price = request.Price,
+                    Adress = request.Address,
+                    Date = DateTime.Now,
+                    Description = request.Description,
+                    ImageLocation = imageLocation
+                };
+
+                _context.Items.Add(newItem);
+                _context.SaveChanges();
+
+                return new AddItemResponseContract
+                {
+                    ResponseCode = 200,
+                    ResponseBody = newItem
+                };
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return new AddItemResponseContract
+            {
+                ResponseCode = 500,
+                ResponseBody = new
+                {
+                    Message = "Error occured while saving image."
+                }
+            };
         }
 
         private string hashPassword(string password)

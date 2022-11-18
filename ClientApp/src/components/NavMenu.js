@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Button, Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
@@ -22,6 +22,9 @@ export class NavMenu extends Component {
   }
 
   render () {
+
+    const authenticatedUserId = sessionStorage.getItem("authenticatedUserId");
+
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
@@ -40,18 +43,25 @@ export class NavMenu extends Component {
                   <NavLink tag={Link} className="text-dark" to="/myAds">My ads</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/signIn"> Sign in</NavLink>
-                </NavItem>
-                <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/signUp">Sign up</NavLink>
                 </NavItem>
-               
-                
+                {!authenticatedUserId &&<NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/signIn">Sign in</NavLink>
+                </NavItem>}
+                {authenticatedUserId &&<NavItem>
+                  <Button onClick={this.logOut} className="text-dark">Log out</Button>
+                </NavItem>}
               </ul>
             </Collapse>
           </Container>
         </Navbar>
       </header>
     );
+  }
+
+  logOut = () => {
+    sessionStorage.removeItem("authenticatedUserEmail");
+    sessionStorage.removeItem("authenticatedUserId");
+    sessionStorage.removeItem("authenticatedUserName");
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button,Row, FormGroup, Input, Label, Col,  FormText} from 'reactstrap';
-
+import axios from 'axios';
 
 export class AddAd extends Component {
   static displayName = AddAd.name;
@@ -15,6 +15,40 @@ export class AddAd extends Component {
     this.setState({
       currentCount: this.state.currentCount + 1
     });
+  }
+
+  handleSubmit = () => {
+    const _title = document.getElementById("title").value;
+    const _price = document.getElementById("price").value;
+    const _address = document.getElementById("exampleAddress").value;
+    const _image = this.state.image;
+    const _description = document.getElementById("exampleText").value;
+
+    const formData = new FormData();
+    formData.append("title", _title);
+    formData.append("price", _price);
+    formData.append("address", _address);
+    formData.append("image", _image);
+    formData.append("description", _description);
+
+    const config = {     
+      headers: { 'content-type': 'multipart/form-data' }
+    }
+
+    const url = `api/items`;
+
+    try {
+      const res = axios.post(url, formData, config);
+      console.log(res);
+      this.setState({ response : res });
+    } catch (ex) {
+      console.log(ex.response.data);
+    }
+  }
+
+  saveFile = (e) => {
+    console.log(e.target.files[0]);
+    this.setState({ image: e.target.files[0] });
   }
 
   render() {
@@ -49,7 +83,7 @@ export class AddAd extends Component {
           </FormGroup>
           <FormGroup>
             <Label for="exampleFile"> Image </Label>
-            <Input id="exampleFile" name="file" type="file" />
+            <Input id="exampleFile" name="file" type="file" onChange={this.saveFile} />
             <FormText> Here image for your ad. Only jpg, png</FormText>
           </FormGroup>
           <FormGroup>
@@ -58,7 +92,7 @@ export class AddAd extends Component {
           </FormGroup>
           
           
-          <Button> Create new ad</Button>
+          <Button onClick={this.handleSubmit}> Create new ad</Button>
         </Form>
 
         {/* <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>

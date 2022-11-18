@@ -62,8 +62,12 @@ export class MyAds extends Component {
     }];
 
   render () {
-    return (
+    const authenticatedUserId = sessionStorage.getItem("authenticatedUserId");
+    if (!authenticatedUserId){
+        return <h2>You must sign in to see your ads.</h2>
+    }
 
+    return (
       <main>
         <div> 
               {

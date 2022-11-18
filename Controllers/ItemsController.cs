@@ -1,4 +1,6 @@
-﻿using buy_house.Database;
+﻿using buy_house.Controllers.Contracts.Requests;
+using buy_house.Controllers.Contracts.Responses;
+using buy_house.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -34,6 +36,14 @@ namespace buy_house.Controllers
         {
             ItemDomain item = _databaseService.GetItemById(id);
             return item;
+        }
+
+        [HttpPost]
+        [Route("/api/[controller]")]
+        public AddItemResponseContract AddItem([FromBody] AddItemRequestContract request)
+        {
+            AddItemResponseContract response = _databaseService.AddItem(request);
+            return response;
         }
     }
 }

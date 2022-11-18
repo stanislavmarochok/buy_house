@@ -53,16 +53,20 @@ namespace buy_house.Database
             List<ItemDomain> items = new List<ItemDomain>();
             foreach (UserDomain user in _newUsers)
             {
-                ItemDomain newItem = new ItemDomain
+                for (int i = 0; i < 7; i++)
                 {
-                    UserId = user.Id,
-                    Title = "Beautiful house",
-                    Price = 2500,
-                    Adress = "huynya",
-                    Date = DateTime.Now,
-                    Description = "description descriptiondescription"
-                };
-                context.Items.Add(newItem);
+                    ItemDomain newItem = new ItemDomain
+                    {
+                        UserId = user.Id,
+                        Title = "Beautiful house",
+                        Price = 2500,
+                        Adress = "huynya",
+                        Date = DateTime.Now,
+                        Description = "description descriptiondescription",
+                        ImageLocation = "images/items/0.jpg"
+                    };
+                    context.Items.Add(newItem);
+                }
             }
 
             context.SaveChanges();
