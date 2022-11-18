@@ -7,7 +7,10 @@ export class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { currentCount: 0 };
+    this.state = { 
+        currentCount: 0,
+        response : false 
+    };
     this.incrementCounter = this.incrementCounter.bind(this);
   }
 
@@ -17,6 +20,30 @@ export class SignIn extends Component {
     });
   }
 
+  handleSubmit = async () => {
+    const _email = document.getElementById("email").value;
+    const _password = document.getElementById("password").value;
+
+    const method = "post";
+    const headers = {'Content-Type':'application/json'};
+    const _body = {
+        email : _email,
+        password : _password
+    };
+
+    const response = await fetch('api/auth', {
+        method : method,
+        headers: headers,
+        body: JSON.stringify(_body)
+    });
+    const data = await response.json();
+    console.log(data);
+    this.setState({ response : data });
+
+    sessionStorage.setItem("authenticatedUserName", data.responseBody.email);
+    sessionStorage.setItem("authenticatedUserId", data.responseBody.id);
+  }
+
   render() {
     return (
       <div>
@@ -24,8 +51,8 @@ export class SignIn extends Component {
           <Row>
             <Col md={12}>
               <FormGroup>
-                <Label for="userName"> UserName </Label>
-                <Input id="userName" name="userName" placeholder="Enter your username" type="text" required/>
+                <Label for="email"> UserName </Label>
+                <Input id="email" name="email" placeholder="Enter your email" type="text" required/>
               </FormGroup>
             </Col>
             
@@ -39,12 +66,8 @@ export class SignIn extends Component {
             </Col>
           </Row>
           
-          <Button color="primary"> Sign In</Button>
+          <Button color="primary" onClick={this.handleSubmit}> Sign In</Button>
         </Form>
-
-        {/* <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
-
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button> */}
       </div>
     );
   }

@@ -4,7 +4,38 @@ import { Form, Button,Row, FormGroup, Input, Label, Col,  FormText} from 'reacts
 
 export class SignUp extends Component {
   static displayName = SignUp.name;
+
+  constructor(props){
+    super(props);
+    this.state = {
+        response : false
+    };
+  }
  
+  handleSubmit = async () => {
+    const _name = document.getElementById("name").value;
+    const _email = document.getElementById("email").value;
+    const _password = document.getElementById("password").value;
+    const _telephone = document.getElementById("telephone").value;
+
+    const method = "post";
+    const headers = {'Content-Type':'application/json'};
+    const _body = {
+        name : _name,
+        email : _email,
+        password : _password,
+        telephone : _telephone
+    };
+
+    const response = await fetch('api/users', {
+        method : method,
+        headers: headers,
+        body: JSON.stringify(_body)
+    });
+    const data = await response.json();
+    console.log(data);
+    this.setState({ response : data });
+  }
 
   render() {
     return (
@@ -45,12 +76,8 @@ export class SignUp extends Component {
           </Row>
           
           
-          <Button color="primary">Sign Up</Button>
+          <Button color="primary" onClick={this.handleSubmit}>Sign Up</Button>
         </Form>
-
-        {/* <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
-
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button> */}
       </div>
     );
   }

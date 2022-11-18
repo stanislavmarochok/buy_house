@@ -14,5 +14,6 @@ namespace buy_house.Database
         ItemDomain GetItemById(int id);
 
         RegisterUserResponseContract RegisterUser(RegisterUserRequestContract request);
+        AuthenticateUserResponseContract AuthenticateUser(AuthenticateUserRequestContract request);
     }
 }

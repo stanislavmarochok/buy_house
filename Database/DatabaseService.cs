@@ -17,7 +17,7 @@ namespace buy_house.Database
             _context = buyHouseDbContext;
         }
 
-        public List<User> GetAllUsers()
+        public List<UserDomain> GetAllUsers()
         {
             return _context.Users.ToList();
         }
@@ -42,12 +42,43 @@ namespace buy_house.Database
             };
 
             _context.Users.Add(newUser);
+            _context.SaveChanges();
 
             RegisterUserResponseContract response = new RegisterUserResponseContract
             {
                 ResponseCode = 200,
                 ResponseBody = newUser
             };
+            return response;
+        }
+
+        public AuthenticateUserResponseContract AuthenticateUser(AuthenticateUserRequestContract request)
+        {
+            UserDomain existingUser = _context.Users.FirstOrDefault(user => user.Email.Equals(request.Email) && user.Password.Equals(request.Password));
+
+            AuthenticateUserResponseContract response;
+            if (existingUser == null)
+            {
+                response = new AuthenticateUserResponseContract
+                {
+                    ResponseCode = 400,
+                    ResponseBody = new {
+                        Message = $"User {request.Email} was not found, or password doesn't match."
+                    }
+                };
+            } else
+            {
+                response = new AuthenticateUserResponseContract
+                {
+                    ResponseCode = 200,
+                    ResponseBody = new {
+                        Message = $"User {request.Email} was successfully authenticated.",
+                        Id = existingUser.Id,
+                        Email = existingUser.Email
+                    }
+                };
+            }
+
             return response;
         }
 
