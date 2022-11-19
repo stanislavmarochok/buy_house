@@ -31,14 +31,10 @@ export class AddAd extends Component {
     formData.append("image", _image);
     formData.append("description", _description);
 
-    const config = {     
-      headers: { 'content-type': 'multipart/form-data' }
-    }
-
     const url = `api/items`;
 
     try {
-      const res = axios.post(url, formData, config);
+      const res = axios.post(url, formData);
       console.log(res);
       this.setState({ response : res });
     } catch (ex) {

@@ -10,7 +10,7 @@ namespace buy_house.Database
     public interface IDatabaseService
     {
         List<UserDomain> GetAllUsers();
-        List<ItemDomain> GetAllItems();
+        List<ItemDomain> GetAllItems(GetAllItemsFilteredRequestContract request);
         ItemDomain GetItemById(int id);
 
         RegisterUserResponseContract RegisterUser(RegisterUserRequestContract request);

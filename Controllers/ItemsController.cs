@@ -24,9 +24,9 @@ namespace buy_house.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ItemDomain> Get()
+        public IEnumerable<ItemDomain> Get([FromQuery] GetAllItemsFilteredRequestContract request)
         {
-            List<ItemDomain> items = _databaseService.GetAllItems();
+            List<ItemDomain> items = _databaseService.GetAllItems(request);
             return items;
         }
 
@@ -40,7 +40,7 @@ namespace buy_house.Controllers
 
         [HttpPost]
         [Route("/api/[controller]")]
-        public AddItemResponseContract AddItem([FromBody] AddItemRequestContract request)
+        public AddItemResponseContract AddItem([FromForm] AddItemRequestContract request)
         {
             AddItemResponseContract response = _databaseService.AddItem(request);
             return response;

@@ -30,9 +30,14 @@ namespace buy_house.Database
             return _context.Users.ToList();
         }
 
-        public List<Item> GetAllItems()
+        public List<Item> GetAllItems(GetAllItemsFilteredRequestContract request)
         {
-            return _context.Items.ToList();
+            var allItems = _context.Items.AsEnumerable();
+            allItems = allItems.Where(item => string.IsNullOrEmpty(request.Title) || item.Title.Contains(request.Title));
+            allItems = allItems.Where(item => string.IsNullOrEmpty(request.Location) || item.Address.Contains(request.Location));
+            allItems = allItems.Where(item => request.PriceMin == null || item.Price >= request.PriceMin);
+            allItems = allItems.Where(item => (request.PriceMax == null || request.PriceMax == 0) || item.Price <= request.PriceMax);
+            return allItems.ToList();
         }
 
         public Item GetItemById(int id)
@@ -94,10 +99,11 @@ namespace buy_house.Database
         {
             try
             {
-
-                string imageLocation = $"public/images/items/{Guid.NewGuid()}.jpg";
-                string path = Path.Combine(_hostingEnvironment.WebRootPath, imageLocation);
-                using (Stream stream = new FileStream(path, FileMode.Create))
+                string imageName = $"{Guid.NewGuid()}.jpg";
+                string publicLocation = Path.Combine("images\\items", imageName);
+                string solutionLocation = Path.Combine("ClientApp\\public", publicLocation);
+                string imageFullPath = Path.Combine(Directory.GetCurrentDirectory(), solutionLocation);
+                using (Stream stream = new FileStream(imageFullPath, FileMode.Create))
                 {
                     request.Image.CopyTo(stream);
                 }
@@ -107,10 +113,10 @@ namespace buy_house.Database
                     UserId = request.UserId,
                     Title = request.Title,
                     Price = request.Price,
-                    Adress = request.Address,
+                    Address = request.Address,
                     Date = DateTime.Now,
                     Description = request.Description,
-                    ImageLocation = imageLocation
+                    ImageName = imageName
                 };
 
                 _context.Items.Add(newItem);

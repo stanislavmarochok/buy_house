@@ -12,6 +12,7 @@ export class Home extends Component {
       groups: [],
       items: []
     };
+    this.imagePublicDirectory = "images/items";
   }
 
   componentDidMount(){
@@ -52,14 +53,12 @@ export class Home extends Component {
               <CardGroup key={`cardGroup-${groupIndex}`}>
                 {group.map((card, cardIndex) => 
                   <Card key={`cardgroup-${groupIndex}-card-${cardIndex}`}>
-                    <CardImg alt="Card image cap" src={card.imageLocation} top width="100%" />
+                    <CardImg alt="Card image cap" src={`${this.imagePublicDirectory}/${card.imageName}`} top width="100%" />
                     <CardBody>
-                      <CardTitle tag="h5"> Beautiful house </CardTitle>
-                      <CardSubtitle className="mb-3" tag="h6"> Dnipro </CardSubtitle>
-                      <CardSubtitle className="mb-2 text-muted" tag="h6"> 1200$ </CardSubtitle>
-                      <CardText>
-                        This is super mega hyper interesting immosible interesting description
-                      </CardText>
+                      <CardTitle tag="h5">{card.title}</CardTitle>
+                      <CardSubtitle className="mb-3" tag="h6">{card.address}</CardSubtitle>
+                      <CardSubtitle className="mb-2 text-muted" tag="h6">{`${card.price}$`}</CardSubtitle>
+                      <CardText>{card.description}</CardText>
                       <Button> Button </Button>
                     </CardBody>
                   </Card>
@@ -77,23 +76,27 @@ export class Home extends Component {
     const location = document.getElementById("filter-location").value;
     const title    = document.getElementById("filter-title").value;
 
-    const _filters = {
-        priceMin: priceMin,
-        priceMax: priceMax,
-        location: location,
-        title: title
-    }
-
     const method = "get";
     const headers = {'Content-Type':'application/json'};
-    const _body = {
-        filters : _filters,
-    };
 
-    const response = await fetch('api/items?' + new URLSearchParams(_body), {
-        method : method,
-        headers: headers
-    });
+    const _body = {};
+    if (priceMin){
+      _body["priceMin"] = priceMin;
+    }
+    if (priceMax){
+      _body["priceMax"] = priceMax;
+    }
+    if (location){
+      _body["location"] = location;
+    }
+    if (title){
+      _body["title"] = title;
+    }
+
+    var url = new URL('http://localhost:38497/api/items');
+    url.search = new URLSearchParams(_body).toString();
+
+    const response = await fetch(url);
     const data = await response.json();
     console.log(data);
     this.setState({ items : data, groups : this.getGroups(data) });
