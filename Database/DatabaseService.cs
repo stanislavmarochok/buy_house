@@ -97,15 +97,21 @@ namespace buy_house.Database
 
         public AddItemResponseContract AddItem(AddItemRequestContract request)
         {
+            const string publicLocationDirectory = "images\\items";
             try
             {
-                string imageName = $"{Guid.NewGuid()}.jpg";
-                string publicLocation = Path.Combine("images\\items", imageName);
-                string solutionLocation = Path.Combine("ClientApp\\public", publicLocation);
-                string imageFullPath = Path.Combine(Directory.GetCurrentDirectory(), solutionLocation);
-                using (Stream stream = new FileStream(imageFullPath, FileMode.Create))
+                string imageName = "no-image.jpg";
+                bool shouldCreateNewImage = request.Image != null;
+                if (shouldCreateNewImage)
                 {
-                    request.Image.CopyTo(stream);
+                    imageName = $"{Guid.NewGuid()}.jpg";
+                    string publicLocation = Path.Combine(publicLocationDirectory, imageName);
+                    string solutionLocation = Path.Combine("ClientApp\\public", publicLocation);
+                    string imageFullPath = Path.Combine(Directory.GetCurrentDirectory(), solutionLocation);
+                    using (Stream stream = new FileStream(imageFullPath, FileMode.Create))
+                    {
+                        request.Image.CopyTo(stream);
+                    }
                 }
 
                 ItemDomain newItem = new ItemDomain
