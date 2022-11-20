@@ -41,13 +41,16 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/myAds">My ads</NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/signUp">Sign up</NavLink>
-                </NavItem>
-                {!user &&<NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/signIn">Sign in</NavLink>
-                </NavItem>}
-                {user &&<NavItem>
+                {!user &&
+                <>
+                  <NavItem>
+                    <NavLink tag={Link} className="text-dark" to="/signUp">Sign up</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={Link} className="text-dark" to="/signIn">Sign in</NavLink>
+                  </NavItem>
+                </>}
+                {user && <NavItem>
                   <Button onClick={this.logOut} className="text-dark">Log out</Button>
                 </NavItem>}
               </ul>

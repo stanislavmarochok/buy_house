@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button,Row, FormGroup, Input, Label, Col} from 'reactstrap';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 export class SignIn extends Component {
   static displayName = SignIn.name;
@@ -18,6 +18,10 @@ export class SignIn extends Component {
     this.setState({
       currentCount: this.state.currentCount + 1
     });
+  }
+
+  makeToast = () => {
+    toast('Here is your toast.');
   }
 
   handleSubmit = async () => {
@@ -54,6 +58,7 @@ export class SignIn extends Component {
   render() {
     return (
       <div>
+        <Toaster />
         <Form className="form-signIn form">
           <Row>
             <Col md={12}>
@@ -74,6 +79,7 @@ export class SignIn extends Component {
           </Row>
           
           <Button color="primary" onClick={this.handleSubmit}> Sign In</Button>
+          <Button color="primary" onClick={this.makeToast}> Sign In</Button>
         </Form>
       </div>
     );
