@@ -149,6 +149,78 @@ namespace buy_house.Database
             };
         }
 
+        public UpdateItemResponseContract UpdateItem(UpdateItemRequestContract request)
+        {
+            const string publicLocationDirectory = "images\\items";
+            try
+            {
+                string imageName = "no-image.jpg";
+                bool shouldCreateNewImage = request.Image != null;
+                if (shouldCreateNewImage)
+                {
+                    imageName = $"{Guid.NewGuid()}.jpg";
+                    string publicLocation = Path.Combine(publicLocationDirectory, imageName);
+                    string solutionLocation = Path.Combine("ClientApp\\public", publicLocation);
+                    string imageFullPath = Path.Combine(Directory.GetCurrentDirectory(), solutionLocation);
+                    using (Stream stream = new FileStream(imageFullPath, FileMode.Create))
+                    {
+                        request.Image.CopyTo(stream);
+                    }
+                }
+
+                ItemDomain updatableItem = _context.Items.FirstOrDefault(item => item.Id == request.Id);
+                if (updatableItem == null)
+                {
+                    return new UpdateItemResponseContract
+                    {
+                        ResponseCode = 400,
+                        ResponseBody = new
+                        {
+                            Message = $"Item with Id {request.Id} doesn't exist."
+                        }
+                    };
+                }
+
+                if (shouldCreateNewImage)
+                {
+                    // remote the old image
+                    imageName = $"{updatableItem.ImageName}";
+                    string publicLocation = Path.Combine(publicLocationDirectory, imageName);
+                    string solutionLocation = Path.Combine("ClientApp\\public", publicLocation);
+                    string oldImageFullPath = Path.Combine(Directory.GetCurrentDirectory(), solutionLocation);
+                    Directory.Delete(oldImageFullPath);
+                }
+
+                updatableItem.Title = request.Title;
+                updatableItem.Price = request.Price;
+                updatableItem.Address = request.Address;
+                updatableItem.Date = DateTime.Now;
+                updatableItem.Description = request.Description;
+                updatableItem.ImageName = imageName;
+
+                _context.SaveChanges();
+
+                return new UpdateItemResponseContract
+                {
+                    ResponseCode = 200,
+                    ResponseBody = updatableItem
+                };
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return new UpdateItemResponseContract
+            {
+                ResponseCode = 500,
+                ResponseBody = new
+                {
+                    Message = "Error occured while updating image."
+                }
+            };
+        }
+
         private string hashPassword(string password)
         {
             return password;

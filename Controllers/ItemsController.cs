@@ -45,5 +45,13 @@ namespace buy_house.Controllers
             AddItemResponseContract response = _databaseService.AddItem(request);
             return response;
         }
+
+        [HttpPut]
+        [Route("/api/[controller]")]
+        public UpdateItemResponseContract UpdateItem([FromForm] UpdateItemRequestContract request)
+        {
+            UpdateItemResponseContract response = _databaseService.UpdateItem(request);
+            return response;
+        }
     }
 }

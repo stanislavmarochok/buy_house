@@ -17,5 +17,6 @@ namespace buy_house.Database
         AuthenticateUserResponseContract AuthenticateUser(AuthenticateUserRequestContract request);
 
         AddItemResponseContract AddItem(AddItemRequestContract request);
+        UpdateItemResponseContract UpdateItem(UpdateItemRequestContract request);
     }
 }
