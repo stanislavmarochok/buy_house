@@ -24,10 +24,10 @@ namespace buy_house.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ItemDomain> Get([FromQuery] GetAllItemsFilteredRequestContract request)
+        public ResponseContract Get([FromQuery] GetAllItemsFilteredRequestContract request)
         {
-            List<ItemDomain> items = _databaseService.GetAllItems(request);
-            return items;
+            ResponseContract response = _databaseService.GetAllItems(request);
+            return response;
         }
 
         [HttpGet]

@@ -7,5 +7,7 @@
         public int? PriceMin { get; set; }
         public int? PriceMax { get; set; }
         public string Location { get; set; }
+        public int ItemsPerPage { get; set; }
+        public int Page { get; set; }
     }
 }

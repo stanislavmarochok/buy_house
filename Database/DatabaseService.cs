@@ -25,15 +25,30 @@ namespace buy_house.Database
             return _context.Users.ToList();
         }
 
-        public List<ItemDomain> GetAllItems(GetAllItemsFilteredRequestContract request)
+        public ResponseContract GetAllItems(GetAllItemsFilteredRequestContract request)
         {
-            var allItems = _context.Items.AsEnumerable();
+            IEnumerable<ItemDomain> allItems = _context.Items.AsEnumerable();
             allItems = allItems.Where(item => request.UserId == null || item.UserId == request.UserId);
             allItems = allItems.Where(item => string.IsNullOrEmpty(request.Title) || item.Title.Contains(request.Title));
             allItems = allItems.Where(item => string.IsNullOrEmpty(request.Location) || item.Address.Contains(request.Location));
             allItems = allItems.Where(item => request.PriceMin == null || item.Price >= request.PriceMin);
             allItems = allItems.Where(item => (request.PriceMax == null || request.PriceMax == 0) || item.Price <= request.PriceMax);
-            return allItems.ToList();
+
+            int allItemsCount = allItems.Count();
+
+            allItems = allItems.Skip(request.ItemsPerPage * request.Page).Take(request.ItemsPerPage);
+
+            ResponseContract responseContract = new ResponseContract
+            {
+                ResponseCode = 200,
+                ResponseBody = new
+                {
+                    PagesCount = (int)Math.Floor((double)allItemsCount / request.ItemsPerPage),
+                    Items = allItems.ToList()
+                }
+            };
+
+            return responseContract;
         }
 
         public ItemDomain GetItemById(int id)
