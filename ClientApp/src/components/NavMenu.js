@@ -3,6 +3,8 @@ import { Button, Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavIte
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
+import toast, { Toaster } from 'react-hot-toast';
+
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
 
@@ -63,5 +65,6 @@ export class NavMenu extends Component {
 
   logOut = () => {
     this.props.setUser(false);
+    toast.success('You are logged out succefull! Bye... 😢');    
   }
 }

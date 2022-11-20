@@ -9,6 +9,7 @@ import { SignUp } from './components/LoginRegister/SignUp';
 
 
 import './custom.css'
+import { Toaster } from 'react-hot-toast';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -23,6 +24,7 @@ export default class App extends Component {
   render () {
     return (
       <Layout setUser={this.setUser} user={this.state.user}>
+        <Toaster />
         <Route exact path='/' component={Home} />
         <Route path='/addAd' component={AddAd} />
         <Route path='/myAds' component={MyAds} />

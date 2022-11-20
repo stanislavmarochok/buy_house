@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Filters  from './Filters';
 import './home.css';
-import { CardGroup, Card, CardImg, CardBody, CardLink, CardTitle, CardSubtitle, CardText, Button, Navbar, NavbarBrand} from 'reactstrap';
 import { Cards } from './Cards';
+import toast from 'react-hot-toast';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -60,9 +60,17 @@ export class Home extends Component {
     const response = await fetch(url, {
       method: method,
       headers: headers
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      this.setState({ items : data });
+      toast.success('Data loaded');
+    })
+    .catch(function() {
+      toast.error('Data not loaded, some error occured!');
     });
-    const data = await response.json();
-    console.log(data);
-    this.setState({ items : data });
   }
 }

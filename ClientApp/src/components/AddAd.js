@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button,Row, FormGroup, Input, Label, Col,  FormText} from 'reactstrap';
 import axios from 'axios';
+import toast, { ToastBar, Toaster } from 'react-hot-toast';
 
 export class AddAd extends Component {
   static displayName = AddAd.name;
@@ -35,10 +36,18 @@ export class AddAd extends Component {
 
     try {
       const res = axios.post(url, formData);
+
+      
+      if(res.responseCode == "200"){
+        toast.success("Ohuenno blya zaebis");
+      }
+
       this.setState({ response : res });
     } catch (ex) {
       console.log(ex.response.data);
     }
+
+    
   }
 
   saveFile = (e) => {
@@ -49,6 +58,7 @@ export class AddAd extends Component {
   render() {
     return (
       <div>
+        <Toaster />
         <Form className="form-addAd form">
           <Row>
             <Col md={12}>
