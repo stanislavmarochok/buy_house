@@ -31,9 +31,9 @@ namespace buy_house.Controllers
         }
 
         [HttpPost]
-        public RegisterUserResponseContract RegisterUser([FromBody] RegisterUserRequestContract request)
+        public ResponseContract RegisterUser([FromBody] RegisterUserRequestContract request)
         {
-            RegisterUserResponseContract response = _databaseService.RegisterUser(request);
+            ResponseContract response = _databaseService.RegisterUser(request);
             return response;
         }
     }

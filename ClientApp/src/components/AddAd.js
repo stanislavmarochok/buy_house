@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button,Row, FormGroup, Input, Label, Col,  FormText} from 'reactstrap';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
 
 export class AddAd extends Component {
   static displayName = AddAd.name;
@@ -42,8 +41,6 @@ export class AddAd extends Component {
       console.log(ex.response.data);
     }
   }
-
-  notify = () => toast("TSOI ZIV");
 
   saveFile = (e) => {
     console.log(e.target.files[0]);
@@ -92,7 +89,6 @@ export class AddAd extends Component {
           
           
           <Button onClick={this.handleSubmit}> Create new ad</Button>
-          <Button onClick={this.notify}> Create notification</Button>
         </Form>
 
         {/* <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>

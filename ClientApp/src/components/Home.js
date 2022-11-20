@@ -10,36 +10,17 @@ export class Home extends Component {
   constructor(props){
     super(props);
     this.state = { 
-      groups: [],
       items: []
     };
     this.imagePublicDirectory = "images/items";
+  }
+
+  componentDidMount(){
     this.fetchItems();
   }
-  
-  getGroups(data) {
-    let items = data;
-    let groupsCount = parseInt(Math.floor(items.length / 3));
-
-    const _groups = [];
-    for (let i = 0; i <= groupsCount; i++) {
-      const _items = [];
-      for(let j = 0; j < 3; j++){
-        let index = i * 3 + j;
-        if(index >= items.length){
-          break;
-        }else{
-          _items.push(items[index]);
-        }
-      }
-      _groups.push(_items);
-    }
-    return _groups;
-  }
-
 
   render () {
-    if(!this.state || !this.state.groups){
+    if(!this.state || !this.state.items){
       return;
     }
     return (
@@ -77,9 +58,12 @@ export class Home extends Component {
     var url = new URL('http://localhost:38497/api/items');
     url.search = new URLSearchParams(_body).toString();
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: method,
+      headers: headers
+    });
     const data = await response.json();
     console.log(data);
-    this.setState({ items : data, groups : this.getGroups(data) });
+    this.setState({ items : data });
   }
 }

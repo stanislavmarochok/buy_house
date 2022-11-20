@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Filters  from './Filters';
 import './home.css';
-import { CardGroup, Card, CardImg, CardBody, CardLink, CardTitle, CardSubtitle, CardText, Button, Navbar, NavbarBrand} from 'reactstrap';
+import { CardGroup, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button} from 'reactstrap';
 
 export class Cards extends Component {
   static displayName = Cards.name;
@@ -9,8 +8,8 @@ export class Cards extends Component {
   constructor(props){
     super(props);
     this.state = { 
-      groups: this.getGroups(this.props.items),
-      items: this.props.items
+      groups: this.getGroups(this.props.data),
+      items: this.props.data
     };
   }
 

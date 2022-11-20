@@ -1,7 +1,5 @@
 ﻿using buy_house.Controllers.Contracts.Requests;
 using buy_house.Controllers.Contracts.Responses;
-using buy_house.Database.Models;
-using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,14 +13,11 @@ namespace buy_house.Database
     public class DatabaseService : IDatabaseService
     {
         private readonly BuyHouseDbContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
 
         public DatabaseService(
-            BuyHouseDbContext buyHouseDbContext,
-            IHostingEnvironment hostingEnvironment)
+            BuyHouseDbContext buyHouseDbContext)
         {
             _context = buyHouseDbContext;
-            _hostingEnvironment = hostingEnvironment;
         }
 
         public List<UserDomain> GetAllUsers()
@@ -30,9 +25,10 @@ namespace buy_house.Database
             return _context.Users.ToList();
         }
 
-        public List<Item> GetAllItems(GetAllItemsFilteredRequestContract request)
+        public List<ItemDomain> GetAllItems(GetAllItemsFilteredRequestContract request)
         {
             var allItems = _context.Items.AsEnumerable();
+            allItems = allItems.Where(item => request.UserId == null || item.UserId == request.UserId);
             allItems = allItems.Where(item => string.IsNullOrEmpty(request.Title) || item.Title.Contains(request.Title));
             allItems = allItems.Where(item => string.IsNullOrEmpty(request.Location) || item.Address.Contains(request.Location));
             allItems = allItems.Where(item => request.PriceMin == null || item.Price >= request.PriceMin);
@@ -40,12 +36,12 @@ namespace buy_house.Database
             return allItems.ToList();
         }
 
-        public Item GetItemById(int id)
+        public ItemDomain GetItemById(int id)
         {
             return _context.Items.FirstOrDefault(item => item.Id == id);
         }
 
-        public RegisterUserResponseContract RegisterUser(RegisterUserRequestContract request)
+        public ResponseContract RegisterUser(RegisterUserRequestContract request)
         {
             UserDomain newUser = new UserDomain
             {
@@ -57,7 +53,7 @@ namespace buy_house.Database
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            RegisterUserResponseContract response = new RegisterUserResponseContract
+            ResponseContract response = new ResponseContract
             {
                 ResponseCode = 200,
                 ResponseBody = newUser
@@ -65,14 +61,14 @@ namespace buy_house.Database
             return response;
         }
 
-        public AuthenticateUserResponseContract AuthenticateUser(AuthenticateUserRequestContract request)
+        public ResponseContract AuthenticateUser(AuthenticateUserRequestContract request)
         {
             UserDomain existingUser = _context.Users.FirstOrDefault(user => user.Email.Equals(request.Email) && user.Password.Equals(request.Password));
 
-            AuthenticateUserResponseContract response;
+            ResponseContract response;
             if (existingUser == null)
             {
-                response = new AuthenticateUserResponseContract
+                response = new ResponseContract
                 {
                     ResponseCode = 400,
                     ResponseBody = new {
@@ -81,7 +77,7 @@ namespace buy_house.Database
                 };
             } else
             {
-                response = new AuthenticateUserResponseContract
+                response = new ResponseContract
                 {
                     ResponseCode = 200,
                     ResponseBody = new {
@@ -95,7 +91,7 @@ namespace buy_house.Database
             return response;
         }
 
-        public AddItemResponseContract AddItem(AddItemRequestContract request)
+        public ResponseContract AddItem(AddItemRequestContract request)
         {
             const string publicLocationDirectory = "images\\items";
             try
@@ -128,7 +124,7 @@ namespace buy_house.Database
                 _context.Items.Add(newItem);
                 _context.SaveChanges();
 
-                return new AddItemResponseContract
+                return new ResponseContract
                 {
                     ResponseCode = 200,
                     ResponseBody = newItem
@@ -139,7 +135,7 @@ namespace buy_house.Database
 
             }
 
-            return new AddItemResponseContract
+            return new ResponseContract
             {
                 ResponseCode = 500,
                 ResponseBody = new
@@ -149,7 +145,7 @@ namespace buy_house.Database
             };
         }
 
-        public UpdateItemResponseContract UpdateItem(UpdateItemRequestContract request)
+        public ResponseContract UpdateItem(UpdateItemRequestContract request)
         {
             const string publicLocationDirectory = "images\\items";
             try
@@ -171,7 +167,7 @@ namespace buy_house.Database
                 ItemDomain updatableItem = _context.Items.FirstOrDefault(item => item.Id == request.Id);
                 if (updatableItem == null)
                 {
-                    return new UpdateItemResponseContract
+                    return new ResponseContract
                     {
                         ResponseCode = 400,
                         ResponseBody = new
@@ -200,7 +196,7 @@ namespace buy_house.Database
 
                 _context.SaveChanges();
 
-                return new UpdateItemResponseContract
+                return new ResponseContract
                 {
                     ResponseCode = 200,
                     ResponseBody = updatableItem
@@ -211,7 +207,7 @@ namespace buy_house.Database
 
             }
 
-            return new UpdateItemResponseContract
+            return new ResponseContract
             {
                 ResponseCode = 500,
                 ResponseBody = new

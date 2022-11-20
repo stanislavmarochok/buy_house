@@ -24,9 +24,9 @@ namespace buy_house.Controllers
         }
 
         [HttpPost]
-        public AuthenticateUserResponseContract AuthenticateUser([FromBody] AuthenticateUserRequestContract request)
+        public ResponseContract AuthenticateUser([FromBody] AuthenticateUserRequestContract request)
         {
-            AuthenticateUserResponseContract response = _databaseService.AuthenticateUser(request);
+            ResponseContract response = _databaseService.AuthenticateUser(request);
             return response;
         }
     }

@@ -32,6 +32,14 @@ namespace buy_house
                 configuration.RootPath = "ClientApp/build";
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_allowedPolicy", policy =>
+                {
+                    policy.WithOrigins("http://localhost:38497");
+                });
+            });
+
             services.AddScoped<IDatabaseService, DatabaseService>();
         }
 
@@ -51,6 +59,8 @@ namespace buy_house
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors("_allowedPolicy");
 
             app.UseEndpoints(endpoints =>
             {

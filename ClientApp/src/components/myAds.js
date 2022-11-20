@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './home.css';
 import { Button} from 'reactstrap';
-import "./myAd.css";
+import "./MyAds.css";
 
 export class MyAds extends Component {
   static displayName = MyAds.name;
@@ -50,10 +50,17 @@ export class MyAds extends Component {
         return;
     }
 
+
     const method = "get";
     const headers = {'Content-Type':'application/json'};
 
-    const response = await fetch(`api/items/user/${authenticatedUserId}`, {
+    const _body = {};
+    _body["userId"] = this.state.authenticatedUserId;
+
+    var url = new URL('http://localhost:38497/api/items');
+    url.search = new URLSearchParams(_body).toString();
+
+    const response = await fetch(url, {
       method: method,
       headers: headers
     });

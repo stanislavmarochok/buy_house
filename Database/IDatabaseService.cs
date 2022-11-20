@@ -13,10 +13,10 @@ namespace buy_house.Database
         List<ItemDomain> GetAllItems(GetAllItemsFilteredRequestContract request);
         ItemDomain GetItemById(int id);
 
-        RegisterUserResponseContract RegisterUser(RegisterUserRequestContract request);
-        AuthenticateUserResponseContract AuthenticateUser(AuthenticateUserRequestContract request);
+        ResponseContract RegisterUser(RegisterUserRequestContract request);
+        ResponseContract AuthenticateUser(AuthenticateUserRequestContract request);
 
-        AddItemResponseContract AddItem(AddItemRequestContract request);
-        UpdateItemResponseContract UpdateItem(UpdateItemRequestContract request);
+        ResponseContract AddItem(AddItemRequestContract request);
+        ResponseContract UpdateItem(UpdateItemRequestContract request);
     }
 }

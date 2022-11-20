@@ -40,17 +40,17 @@ namespace buy_house.Controllers
 
         [HttpPost]
         [Route("/api/[controller]")]
-        public AddItemResponseContract AddItem([FromForm] AddItemRequestContract request)
+        public ResponseContract AddItem([FromForm] AddItemRequestContract request)
         {
-            AddItemResponseContract response = _databaseService.AddItem(request);
+            ResponseContract response = _databaseService.AddItem(request);
             return response;
         }
 
         [HttpPut]
         [Route("/api/[controller]")]
-        public UpdateItemResponseContract UpdateItem([FromForm] UpdateItemRequestContract request)
+        public ResponseContract UpdateItem([FromForm] UpdateItemRequestContract request)
         {
-            UpdateItemResponseContract response = _databaseService.UpdateItem(request);
+            ResponseContract response = _databaseService.UpdateItem(request);
             return response;
         }
     }

@@ -2,6 +2,7 @@
 {
     public class GetAllItemsFilteredRequestContract
     {
+        public int? UserId { get; set; }
         public string Title { get; set; }
         public int? PriceMin { get; set; }
         public int? PriceMax { get; set; }

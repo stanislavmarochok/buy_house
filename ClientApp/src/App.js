@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { MyAds } from './components/myAds';
+import { MyAds } from './components/MyAds';
 import { AddAd } from './components/AddAd';
 import { SignIn } from './components/LoginRegister/SignIn';
 import { SignUp } from './components/LoginRegister/SignUp';
