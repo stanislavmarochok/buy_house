@@ -26,6 +26,10 @@ export class Home extends Component {
     this.fetchItems(event.selected);
   };
 
+  applyFilters = () => {
+    this.fetchItems();
+  }
+
   render () {
     if(!this.state || !this.state.items){
       return;
@@ -35,7 +39,7 @@ export class Home extends Component {
 
     return (
       <main>
-        <Filters applyFilters={this.fetchItems} />
+        <Filters applyFilters={this.applyFilters} />
         <Cards data={this.state.items} />
         <ReactPaginate
           breakLabel="..."
@@ -66,7 +70,7 @@ export class Home extends Component {
     const location = document.getElementById("filter-location").value;
     const title    = document.getElementById("filter-title").value;
     const itemsPerPage = this.state.itemsPerPage;
-    const page = pageIdx == null ? this.state.page : pageIdx;
+    const page = pageIdx != null ? pageIdx : this.state.page;
 
     const method = "get";
     const headers = {'Content-Type':'application/json'};
