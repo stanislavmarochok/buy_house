@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button,Row, FormGroup, Input, Label, Col,  FormText} from 'reactstrap';
+import { Form, Button,Row, FormGroup, Input, Label, Col} from 'reactstrap';
 
 
 export class SignIn extends Component {
@@ -31,18 +31,24 @@ export class SignIn extends Component {
         password : _password
     };
 
+    const props = this.props;
+
     const response = await fetch('api/auth', {
         method : method,
         headers: headers,
         body: JSON.stringify(_body)
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      if (data.responseCode == '200'){
+        const user = {
+          id: data.responseBody.id,
+          email: data.responseBody.email
+        }
+  
+        props.setUser(user);
+      }
     });
-    const data = await response.json();
-    console.log(data);
-    this.setState({ response : data });
-
-    sessionStorage.setItem("authenticatedUserEmail", data.responseBody.email);
-    sessionStorage.setItem("authenticatedUserId", data.responseBody.id);
-    sessionStorage.setItem("authenticatedUserName", data.responseBody.name);
   }
 
   render() {

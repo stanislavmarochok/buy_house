@@ -22,8 +22,7 @@ export class NavMenu extends Component {
   }
 
   render () {
-
-    const authenticatedUserId = sessionStorage.getItem("authenticatedUserId");
+    const user = this.props.user;
 
     return (
       <header>
@@ -45,10 +44,10 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/signUp">Sign up</NavLink>
                 </NavItem>
-                {!authenticatedUserId &&<NavItem>
+                {!user &&<NavItem>
                   <NavLink tag={Link} className="text-dark" to="/signIn">Sign in</NavLink>
                 </NavItem>}
-                {authenticatedUserId &&<NavItem>
+                {user &&<NavItem>
                   <Button onClick={this.logOut} className="text-dark">Log out</Button>
                 </NavItem>}
               </ul>
@@ -60,8 +59,6 @@ export class NavMenu extends Component {
   }
 
   logOut = () => {
-    sessionStorage.removeItem("authenticatedUserEmail");
-    sessionStorage.removeItem("authenticatedUserId");
-    sessionStorage.removeItem("authenticatedUserName");
+    this.props.setUser(false);
   }
 }

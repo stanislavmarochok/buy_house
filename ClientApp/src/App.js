@@ -16,27 +16,18 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [],
-            loading: true,
+          user: "asdf"
         };
-    }
-
-    componentDidMount() {
-        // this.LoadAllItems();
     }
 
   render () {
     return (
-      <Layout>
+      <Layout setUser={this.setUser} user={this.state.user}>
         <Route exact path='/' component={Home} />
         <Route path='/addAd' component={AddAd} />
         <Route path='/myAds' component={MyAds} />
-        <Route path='/signIn' component={SignIn} />
+        <Route path='/signIn' render={(props) => <SignIn user="asfdjk" setUser={this.setUser} {...props} />} />
         <Route path='/signUp' component={SignUp} />
-
-            <ul>
-                {this.state.items.map(item => <li key={`item-${item.id}`}>{item.title}</li>)}
-            </ul>
       </Layout>
     );
     }
@@ -45,5 +36,9 @@ export default class App extends Component {
         const response = await fetch('/api/items');
         const data = await response.json();
         this.setState({ items: data, loading: false });
+    }
+
+    setUser = (user) => {
+      this.setState({ user: user });
     }
 }

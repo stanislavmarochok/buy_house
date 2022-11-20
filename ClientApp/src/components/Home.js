@@ -12,7 +12,6 @@ export class Home extends Component {
     this.state = { 
       items: []
     };
-    this.imagePublicDirectory = "images/items";
   }
 
   componentDidMount(){

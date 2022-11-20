@@ -83,7 +83,8 @@ namespace buy_house.Database
                     ResponseBody = new {
                         Message = $"User {request.Email} was successfully authenticated.",
                         Id = existingUser.Id,
-                        Email = existingUser.Email
+                        Email = existingUser.Email,
+                        Name = existingUser.Name
                     }
                 };
             }

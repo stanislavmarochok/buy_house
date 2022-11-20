@@ -35,7 +35,6 @@ export class AddAd extends Component {
 
     try {
       const res = axios.post(url, formData);
-      console.log(res);
       this.setState({ response : res });
     } catch (ex) {
       console.log(ex.response.data);

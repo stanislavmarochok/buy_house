@@ -7,10 +7,7 @@ export class Cards extends Component {
 
   constructor(props){
     super(props);
-    this.state = { 
-      groups: this.getGroups(this.props.data),
-      items: this.props.data
-    };
+    this.imagePublicDirectory = "images/items";
   }
 
   getGroups(data) {
@@ -35,12 +32,13 @@ export class Cards extends Component {
 
 
   render () {
-    if(!this.state || !this.state.groups){
+    if(!this.props || !this.props.data){
       return;
     }
+    const groups = this.getGroups(this.props.data);
     return (
         <div> {/*here cards */}
-            {this.state.groups.map((group, groupIndex) => (
+            {groups.map((group, groupIndex) => (
                 <CardGroup key={`cardGroup-${groupIndex}`}>
                 {group.map((card, cardIndex) => 
                     <Card key={`cardgroup-${groupIndex}-card-${cardIndex}`}>

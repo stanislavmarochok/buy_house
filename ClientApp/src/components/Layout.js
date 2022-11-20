@@ -9,7 +9,7 @@ export class Layout extends Component {
   render () {
     return (
       <div>
-        <NavMenu />
+        <NavMenu setUser={this.props.setUser} user={this.props.user} />
         <Container style={{minHeight: "60vh"}}>
           {this.props.children}
         </Container>
