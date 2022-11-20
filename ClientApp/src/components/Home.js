@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Filters  from './Filters';
 import './home.css';
 import { CardGroup, Card, CardImg, CardBody, CardLink, CardTitle, CardSubtitle, CardText, Button, Navbar, NavbarBrand} from 'reactstrap';
+import { Cards } from './Cards';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -13,9 +14,6 @@ export class Home extends Component {
       items: []
     };
     this.imagePublicDirectory = "images/items";
-  }
-
-  componentDidMount(){
     this.fetchItems();
   }
   
@@ -48,24 +46,7 @@ export class Home extends Component {
       <main>
         <Filters applyFilters={this.fetchItems} />
         
-        <div> {/*here cards */}
-          {this.state.groups.map((group, groupIndex) => (
-              <CardGroup key={`cardGroup-${groupIndex}`}>
-                {group.map((card, cardIndex) => 
-                  <Card key={`cardgroup-${groupIndex}-card-${cardIndex}`}>
-                    <CardImg alt="Card image cap" src={`${this.imagePublicDirectory}/${card.imageName}`} top width="100%" />
-                    <CardBody>
-                      <CardTitle tag="h5">{card.title}</CardTitle>
-                      <CardSubtitle className="mb-3" tag="h6">{card.address}</CardSubtitle>
-                      <CardSubtitle className="mb-2 text-muted" tag="h6">{`${card.price}$`}</CardSubtitle>
-                      <CardText>{card.description}</CardText>
-                      <Button> Button </Button>
-                    </CardBody>
-                  </Card>
-                )}
-              </CardGroup>
-          ))}
-        </div>
+        <Cards data={this.state.items} />
       </main>
     );
   }

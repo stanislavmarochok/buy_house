@@ -1,70 +1,25 @@
 import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
 import './home.css';
-import { CardGroup, Card, CardImg, CardBody, CardLink, CardTitle, CardSubtitle, CardText, Button, Navbar, NavbarBrand} from 'reactstrap';
-import { EditPage} from './EditPage';
+import { Button} from 'reactstrap';
 import "./myAd.css";
-
-
-
 
 export class MyAds extends Component {
   static displayName = MyAds.name;
 
   constructor(props){
     super(props);
+    this.state = {
+      items : [],
+      authenticatedUserId : sessionStorage.getItem("authenticatedUserId")
+    };
+
+    this.fetchItems();
   }
-  
-  items = [
-    {
-        id: 0,
-        title: 'beutiful house',
-        price: '1120$',
-        date: "12.05.2006",
-        imgLink: "https://picsum.photos/318/180"
-    },
-    {
-        id: 1,
-        title: 'middle house',
-        price: '1120$',
-        date: "12.05.2006",
-        imgLink: "https://picsum.photos/318/180"
-
-
-    },
-    {
-        id: 2,
-        title: 'good house',
-        price: '1120$',
-        date: "12.05.2006",
-        imgLink: "https://picsum.photos/318/180"
-
-
-    },
-    {
-        id: 3,
-        title: 'bad house',
-        price: '1120$',
-        date: "12.05.2006",
-        imgLink: "https://picsum.photos/318/180"
-
-
-    },
-    {
-        id: 4,
-        title: 'the best house',
-        price: '1120$',
-        date: "12.05.2006",
-        imgLink: "https://picsum.photos/318/180"
-
-
-    }];
 
   render () {
-    const authenticatedUserId = sessionStorage.getItem("authenticatedUserId");
-    if (!authenticatedUserId){
-        return <h2>You must sign in to see your ads.</h2>
+    if (!this.state.authenticatedUserId){
+      return <h2>You must sign in to see your ads.</h2>;
     }
 
     return (
@@ -88,5 +43,22 @@ export class MyAds extends Component {
         </div>
       </main>
     );
+  }
+
+  fetchItems = async () => {
+    if (!this.state.authenticatedUserId){
+        return;
+    }
+
+    const method = "get";
+    const headers = {'Content-Type':'application/json'};
+
+    const response = await fetch(`api/items/user/${authenticatedUserId}`, {
+      method: method,
+      headers: headers
+    });
+    const data = await response.json();
+    console.log(data);
+    this.setState({ items : data });
   }
 }
