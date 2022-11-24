@@ -47,10 +47,10 @@ namespace buy_house.Controllers
         }
 
         [HttpPut]
-        [Route("/api/[controller]")]
-        public ResponseContract UpdateItem([FromForm] UpdateItemRequestContract request)
+        [Route("/api/[controller]/{id}")]
+        public ResponseContract UpdateItem(int id, [FromForm] UpdateItemRequestContract request)
         {
-            ResponseContract response = _databaseService.UpdateItem(request);
+            ResponseContract response = _databaseService.UpdateItem(id, request);
             return response;
         }
     }

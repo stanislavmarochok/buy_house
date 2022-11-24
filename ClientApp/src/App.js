@@ -6,7 +6,7 @@ import { MyAds } from './components/MyAds';
 import { AddAd } from './components/AddAd';
 import { SignIn } from './components/LoginRegister/SignIn';
 import { SignUp } from './components/LoginRegister/SignUp';
-
+import { EditItem } from './components/EditItem';
 
 import './custom.css'
 import { Toaster } from 'react-hot-toast';
@@ -30,6 +30,7 @@ export default class App extends Component {
         <Route path='/myAds' component={MyAds} />
         <Route path='/signIn' render={(props) => <SignIn user="asfdjk" setUser={this.setUser} {...props} />} />
         <Route path='/signUp' component={SignUp} />
+        <Route path='/items/:id' component={EditItem} />
       </Layout>
     );
     }

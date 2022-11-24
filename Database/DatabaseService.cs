@@ -161,7 +161,7 @@ namespace buy_house.Database
             };
         }
 
-        public ResponseContract UpdateItem(UpdateItemRequestContract request)
+        public ResponseContract UpdateItem(int id, UpdateItemRequestContract request)
         {
             const string publicLocationDirectory = "images\\items";
             try
@@ -180,7 +180,7 @@ namespace buy_house.Database
                     }
                 }
 
-                ItemDomain updatableItem = _context.Items.FirstOrDefault(item => item.Id == request.Id);
+                ItemDomain updatableItem = _context.Items.FirstOrDefault(item => item.Id == id);
                 if (updatableItem == null)
                 {
                     return new ResponseContract
@@ -188,7 +188,7 @@ namespace buy_house.Database
                         ResponseCode = 400,
                         ResponseBody = new
                         {
-                            Message = $"Item with Id {request.Id} doesn't exist."
+                            Message = $"Item with Id {id} doesn't exist."
                         }
                     };
                 }
