@@ -73,7 +73,6 @@ export class SignIn extends Component {
                 <Input id="email" name="email" placeholder="Enter your email" type="text" required/>
               </FormGroup>
             </Col>
-            
           </Row>
           <Row>
           <Col md={12}>

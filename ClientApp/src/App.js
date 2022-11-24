@@ -17,7 +17,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          user: "asdf"
+          user: false
         };
     }
 
@@ -26,7 +26,7 @@ export default class App extends Component {
       <Layout setUser={this.setUser} user={this.state.user}>
         <Toaster />
         <Route exact path='/' component={Home} />
-        <Route path='/addAd' component={AddAd} />
+        <Route path='/addAd' render={(props) => <AddAd user={this.state.user} setUser={this.setUser} {...props} />} />
         <Route path='/myAds' component={MyAds} />
         <Route path='/signIn' render={(props) => <SignIn user="asfdjk" setUser={this.setUser} {...props} />} />
         <Route path='/signUp' component={SignUp} />

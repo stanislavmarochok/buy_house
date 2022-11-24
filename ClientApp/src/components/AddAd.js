@@ -26,6 +26,7 @@ export class AddAd extends Component {
     const _description = document.getElementById("exampleText").value;
 
     const formData = new FormData();
+    formData.append("userId", this.props.user.id);
     formData.append("title", _title);
     formData.append("price", _price);
     formData.append("address", _address);
