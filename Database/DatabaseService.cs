@@ -56,6 +56,11 @@ namespace buy_house.Database
             return _context.Items.FirstOrDefault(item => item.Id == id);
         }
 
+        public List<ItemDomain> GetItemsByUserId(int userId)
+        {
+            return _context.Items.Where(item => item.UserId == userId).ToList();
+        }
+
         public ResponseContract RegisterUser(RegisterUserRequestContract request)
         {
             UserDomain newUser = new UserDomain
@@ -126,11 +131,24 @@ namespace buy_house.Database
                     }
                 }
 
+                List<string> validationErrors = ValidateNewItem(request);
+                if (validationErrors.Count > 0)
+                {
+                    return new ResponseContract
+                    {
+                        ResponseCode = 400,
+                        ResponseBody = new
+                        {
+                            Errors = validationErrors
+                        }
+                    };
+                }
+
                 ItemDomain newItem = new ItemDomain
                 {
-                    UserId = request.UserId,
+                    UserId = request.UserId.Value,
                     Title = request.Title,
-                    Price = request.Price,
+                    Price = request.Price.Value,
                     Address = request.Address,
                     Date = DateTime.Now,
                     Description = request.Description,
@@ -157,6 +175,63 @@ namespace buy_house.Database
                 ResponseBody = new
                 {
                     Message = "Error occured while saving image."
+                }
+            };
+        }
+
+        private List<string> ValidateNewItem(AddItemRequestContract request)
+        {
+            List<string> errors = new List<string>();
+
+            // Validate UserId
+            if (!request.UserId.HasValue)
+            {
+                errors.Add("You must authenticate first to add new ads.");
+            }
+
+            // Validate other
+            // TODO: validate other properties
+
+            return errors;
+        }
+
+        public ResponseContract DeleteItem(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new ResponseContract
+                {
+                    ResponseCode = 400,
+                    ResponseBody = new
+                    {
+                        Message = $"Item {id} doesn't exist."
+                    }
+                };
+            }
+
+            ItemDomain item = _context.Items.FirstOrDefault(item => item.Id == id.Value);
+
+            if (item == null)
+            {
+                return new ResponseContract
+                {
+                    ResponseCode = 400,
+                    ResponseBody = new
+                    {
+                        Message = $"Item {id} was not found."
+                    }
+                };
+            }
+
+            _context.Items.Remove(item);
+            _context.SaveChanges();
+
+            return new ResponseContract
+            {
+                ResponseCode = 200,
+                ResponseBody = new
+                {
+                    Message = $"Item {item.Id} was deleted successfully."
                 }
             };
         }

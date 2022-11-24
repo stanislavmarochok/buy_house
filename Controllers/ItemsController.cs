@@ -38,6 +38,14 @@ namespace buy_house.Controllers
             return item;
         }
 
+        [HttpGet]
+        [Route("/api/[controller]/user/{userId}")]
+        public List<ItemDomain> GetByUserId(int userId)
+        {
+            List<ItemDomain> items = _databaseService.GetItemsByUserId(userId);
+            return items;
+        }
+
         [HttpPost]
         [Route("/api/[controller]")]
         public ResponseContract AddItem([FromForm] AddItemRequestContract request)
@@ -51,6 +59,14 @@ namespace buy_house.Controllers
         public ResponseContract UpdateItem(int id, [FromForm] UpdateItemRequestContract request)
         {
             ResponseContract response = _databaseService.UpdateItem(id, request);
+            return response;
+        }
+
+        [HttpDelete]
+        [Route("/api/[controller]/{id}")]
+        public ResponseContract DeleteItem(int? id)
+        {
+            ResponseContract response = _databaseService.DeleteItem(id);
             return response;
         }
     }

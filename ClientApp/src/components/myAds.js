@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 
 import './home.css';
-import { Button} from 'reactstrap';
 import "./MyAds.css";
+import { Button, NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export class MyAds extends Component {
   static displayName = MyAds.name;
@@ -11,22 +13,25 @@ export class MyAds extends Component {
     super(props);
     this.state = {
       items : [],
-      authenticatedUserId : sessionStorage.getItem("authenticatedUserId")
     };
 
     this.fetchItems();
   }
 
   render () {
-    if (!this.state.authenticatedUserId){
+    if (!this.props.user.id){
       return <h2>You must sign in to see your ads.</h2>;
+    }
+
+    if (!this.state.items){
+      return;
     }
 
     return (
       <main>
         <div> 
               {
-                this.items.map((item, index) => (
+                this.state.items.map((item, index) => (
                     <table key={`itemMy-${item.id}`} className='itemMyAd'>
                         <tr>
                             <th>{index+1}.</th>
@@ -34,8 +39,8 @@ export class MyAds extends Component {
                             <th>{item.price}</th>
                             <th>{item.date}</th>
                             <th><img src={item.imgLink}></img></th>
-                            <th><Button OnClick={null} color='success' >Edit</Button></th>
-                            <th><Button color='danger' >Delete</Button></th>
+                            <th><NavLink tag={Link} className="text-dark" to={`/items/edit/${item.id}`}>Edit</NavLink></th>
+                            <th><Button color='danger' onClick={() => this.deleteItem(item.id)}>Delete</Button></th>
                         </tr>
                     </table>
                 ))
@@ -46,7 +51,7 @@ export class MyAds extends Component {
   }
 
   fetchItems = async () => {
-    if (!this.state.authenticatedUserId){
+    if (!this.props || !this.props.user || !this.props.user.id){
         return;
     }
 
@@ -54,18 +59,39 @@ export class MyAds extends Component {
     const method = "get";
     const headers = {'Content-Type':'application/json'};
 
-    const _body = {};
-    _body["userId"] = this.state.authenticatedUserId;
+    const response = await fetch(`api/items/user/${this.props.user.id}`, {
+      method: method,
+      headers: headers
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      this.setState({ 
+        items : data
+      });
+      toast.success('Data loaded');
+    })
+    .catch(function() {
+      toast.error('Data not loaded, some error occured!');
+    });;
+  }
 
-    var url = new URL('http://localhost:38497/api/items');
-    url.search = new URLSearchParams(_body).toString();
+  deleteItem = async (itemId) => {
+    if (!itemId || !this.props.user.id){
+        return;
+    }
 
-    const response = await fetch(url, {
+    const method = "delete";
+    const headers = {'Content-Type':'application/json'};
+
+    const response = await fetch(`api/items/${itemId}`, {
       method: method,
       headers: headers
     });
     const data = await response.json();
-    console.log(data);
-    this.setState({ items : data });
+
+    this.fetchItems();
   }
 }

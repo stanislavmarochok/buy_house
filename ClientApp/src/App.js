@@ -27,10 +27,10 @@ export default class App extends Component {
         <Toaster />
         <Route exact path='/' component={Home} />
         <Route path='/addAd' render={(props) => <AddAd user={this.state.user} setUser={this.setUser} {...props} />} />
-        <Route path='/myAds' component={MyAds} />
+        <Route path='/myAds' render={(props) => <MyAds user={this.state.user} {...props} />} />
         <Route path='/signIn' render={(props) => <SignIn user="asfdjk" setUser={this.setUser} {...props} />} />
         <Route path='/signUp' component={SignUp} />
-        <Route path='/items/:id' component={EditItem} />
+        <Route path='/items/edit/:id' component={EditItem} />
       </Layout>
     );
     }

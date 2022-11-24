@@ -39,13 +39,16 @@ export class AddAd extends Component {
       const res = axios.post(url, formData);
 
       
-      if(res.responseCode == "200"){
+      if (res.responseCode == "200"){
         toast.success("Ohuenno blya zaebis");
+        this.setState({ response : res });
       }
 
-      this.setState({ response : res });
+      toast.error("Adding a new ad failed.");
+
     } catch (ex) {
       console.log(ex.response.data);
+      toast.error("Adding a new ad failed.");
     }
 
     
