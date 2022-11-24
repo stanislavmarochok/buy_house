@@ -27,24 +27,24 @@ namespace buy_house.Database
 
         public ResponseContract GetAllItems(GetAllItemsFilteredRequestContract request)
         {
-            IEnumerable<ItemDomain> allItems = _context.Items.AsEnumerable();
-            allItems = allItems.Where(item => request.UserId == null || item.UserId == request.UserId);
-            allItems = allItems.Where(item => string.IsNullOrEmpty(request.Title) || item.Title.Contains(request.Title));
-            allItems = allItems.Where(item => string.IsNullOrEmpty(request.Location) || item.Address.Contains(request.Location));
-            allItems = allItems.Where(item => request.PriceMin == null || item.Price >= request.PriceMin);
-            allItems = allItems.Where(item => (request.PriceMax == null || request.PriceMax == 0) || item.Price <= request.PriceMax);
+            IEnumerable<ItemDomain> items = _context.Items.AsEnumerable();
+            items = items.Where(item => request.UserId == null || item.UserId == request.UserId);
+            items = items.Where(item => string.IsNullOrEmpty(request.Title) || item.Title.Contains(request.Title));
+            items = items.Where(item => string.IsNullOrEmpty(request.Location) || item.Address.Contains(request.Location));
+            items = items.Where(item => request.PriceMin == null || item.Price >= request.PriceMin);
+            items = items.Where(item => (request.PriceMax == null || request.PriceMax == 0) || item.Price <= request.PriceMax);
 
-            int allItemsCount = allItems.Count();
+            int allItemsCount = items.Count();
 
-            allItems = allItems.Skip(request.ItemsPerPage * request.Page).Take(request.ItemsPerPage);
+            items = items.Skip(request.ItemsPerPage * request.Page).Take(request.ItemsPerPage);
 
             ResponseContract responseContract = new ResponseContract
             {
                 ResponseCode = 200,
                 ResponseBody = new
                 {
-                    PagesCount = (int)Math.Floor((double)allItemsCount / request.ItemsPerPage),
-                    Items = allItems.ToList()
+                    PagesCount = (int)Math.Ceiling((double)allItemsCount / request.ItemsPerPage),
+                    Items = items.ToList()
                 }
             };
 
